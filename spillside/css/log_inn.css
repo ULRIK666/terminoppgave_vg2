@@ -1,0 +1,36 @@
+body {
+    background-color: rgb(236, 230, 230);
+    color: rgb(0, 0, 0);
+} 
+
+button {
+    width: 50px;
+    background-color: rgb(106, 106, 106);
+}
+
+.button {
+    width: 50px;
+    background-color: rgb(106, 106, 106);
+
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+}
+
+.box {
+    background-color: rgb(235, 235, 235);
+    border-radius: 30px;
+    margin: 20px;
+    width: 300px;
+}
+
+.innhold_plassering {
+    margin: 25px;
+    width: 250px;   
+}
+
+input {
+    color: black;
+} 
