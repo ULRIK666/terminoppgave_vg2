@@ -10,8 +10,13 @@ let newgame;
 let controls;
 let controls_button;
 let control_text;
+let info;
+let info_button;
+let info_text;
 let show_controlls = false;
+let show_info = false;
 
+let playing = false;
 
 
 let countdown;
@@ -33,8 +38,8 @@ function setup() {
 	target = new Sprite;
 	target.x = random(width / 4 + 25, width - width / 4 - 25);
 	target.y = random(25, height - 25);
-	target.width = 30;
-	target.height = 30;
+	target.width = 1;
+	target.height = 1;
 	target.collider = 'static';
 
 	countdown = new Sprite;
@@ -47,18 +52,38 @@ function setup() {
 	controls = new Sprite;
 	controls.img = '../../spillside/images/controller.png';
 	controls.x = width - width / 8;
-	controls.y = 100;
+	controls.y = height/2 - 150;
 	controls.width = 30;
 	controls.height = 30;
+	controls.collider = 'none';
 
 	controls_button = new Sprite;
 	controls_button.text = "Controlls";
 	controls_button.color = 'lightblue';
 	controls_button.textSize = 30;
 	controls_button.x = width - width / 8;
-	controls_button.y = 170;
+	controls_button.y = height/2 - 80;
 	controls_button.width = 150;
 	controls_button.height = 50;
+	controls_button.collider = 'none';
+
+	info = new Sprite;
+	info.img = '../../spillside/images/info.png';
+	info.x = width / 8;
+	info.y = height/2 - 150;
+	info.width = 30;
+	info.height = 30;
+	info.collider = 'none';
+
+	info_button = new Sprite;
+	info_button.text = "Info";
+	info_button.color = 'lightblue';
+	info_button.textSize = 30;
+	info_button.x = width / 8;
+	info_button.y = height/2 - 80;
+	info_button.width = 150;
+	info_button.height = 50;
+	info_button.collider = 'none';
 
 	gameovermessage = new Sprite;
 	gameovermessage.text = "No time left",
@@ -66,7 +91,7 @@ function setup() {
 	gameovermessage.width = 1;
 	gameovermessage.height = 1;
 	gameovermessage.layer = -2;
-	gameovermessage.collider = 'static';
+	gameovermessage.collider = 'none';
 
 	gameoverscore = new Sprite;
 	gameoverscore.x = width / 2;
@@ -74,7 +99,7 @@ function setup() {
 	gameoverscore.layer = -2;
 	gameoverscore.width = 1;
 	gameoverscore.height = 1;
-	gameoverscore.collider = 'static';
+	gameoverscore.collider = 'none';
 
 	savescoremessage = new Sprite;
 	savescoremessage.x = width / 2;
@@ -82,7 +107,7 @@ function setup() {
 	savescoremessage.layer = -2;
 	savescoremessage.width = 1;
 	savescoremessage.height = 1;
-	savescoremessage.collider = 'static';
+	savescoremessage.collider = 'none';
 
 	newgame = new Sprite;
 	newgame.text = "Play again";
@@ -92,12 +117,23 @@ function setup() {
 	newgame.height = 1;
 	newgame.layer = -2;
 	newgame.color = 'green';
+	newgame.collider = 'none'
+
+	startgame = new Sprite;
+	startgame.text = "Play game";
+	startgame.textSize = 30;
+	startgame.x = width / 2;
+	startgame.y = height / 2;
+	startgame.width = 200;
+	startgame.height = 100;
+	startgame.layer = 2;
+	startgame.color = 'green';
 }
 
 function draw() {
 	background('gray');
 
-	if (mouse.presses() && mouseX > target.x - 15 && mouseX < target.x + 15 && mouseY > target.y - 15 && mouseY < target.y + 15) {
+	if (mouse.presses() && mouseX > target.x - 15 && mouseX < target.x + 15 && mouseY > target.y - 15 && mouseY < target.y + 15 && playing == true) {
 		target.remove();
 		newbox();
 		score += 1;
@@ -105,7 +141,7 @@ function draw() {
 		resetTime();
 	}
 
-	if (mouse.presses() && mouseX > controls_button.x - 50 && mouseX < controls_button.x + 50 && mouseY > controls_button.y - 20 && mouseY < controls_button.y + 20) {
+	if (mouse.presses() && mouseX > controls_button.x - 75 && mouseX < controls_button.x + 75 && mouseY > controls_button.y - 25 && mouseY < controls_button.y + 25) {
 		if (show_controlls == true) {
 			control_text.remove();
 			show_controlls = false;
@@ -117,13 +153,40 @@ function draw() {
 			control_text.x = width - width / 8;
 			control_text.y = 400;
 			control_text.width = width / 5;
-			control_text.height = height / 2;
+			control_text.height = 150;
 			//left aligne virker ikke
 			//			control_text.textAlign = LEFT; 
 			show_controlls = true;
 		}
 	}
 
+	if (mouse.presses() && mouseX > info_button.x - 75 && mouseX < info_button.x + 75 && mouseY > info_button.y - 25 && mouseY < info_button.y + 25) {
+		if (show_controlls == true) {
+			info_text.remove();
+			show_info = false;
+		} else {
+			info_text = new Sprite;
+			info_text.text = "Aim trainer info: \n prøv å trykke på boxene \nså fort som mulig";
+			info_text.color = 'lightgray';
+			info_text.textSize = 24;
+			info_text.x = width / 8;
+			info_text.y = 400;
+			info_text.width = width / 5;
+			info_text.height = 150;
+			//left aligne virker ikke
+			//			control_text.textAlign = LEFT; 
+			show_info = true;
+		}
+	}
+
+	if (startgame && playing == false && mouse.presses() && mouseX > startgame.x - 75 && mouseX < startgame.x + 75 && mouseY > startgame.y - 40 && mouseY < startgame.y + 40) {
+		timeleft = 15;
+		originaltime = 3;
+		playing = true;
+		startgame.remove();
+		target.remove();
+		newbox();
+	}
 
 	if (newgame.layer == 1 && mouse.presses() && mouseX > newgame.x - 75 && mouseX < newgame.x + 75 && mouseY > newgame.y - 40 && mouseY < newgame.y + 40) {
 		if (score > 0) {
@@ -150,7 +213,6 @@ function draw() {
 		gameoverscore.layer = -2;
 		savescoremessage.layer = -2;
 
-
 		countdown = new Sprite;
 		countdown.x = 170;
 		countdown.y = 80;
@@ -158,12 +220,14 @@ function draw() {
 		countdown.height = 30;
 		countdown.color = 'green'
 
+		playing = true;
+
 		newbox();
 	}
 
 	textSize(30);
 
-	if (timeleft <= 0) {
+	if (timeleft <= 0 && playing == true) {
 		gameovermessage.layer = 1;
 		gameovermessage.textSize = 30;
 		gameovermessage.text = "No time left";
@@ -204,7 +268,9 @@ function resetTime() {
 }
 
 setInterval(() => {
+	if(playing == true) {
 	timeleft -= 1;
+	}
 }, 1000);
 
 
