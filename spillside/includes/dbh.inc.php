@@ -1,8 +1,8 @@
 <?php 
 
 $dsn = "mysql:host=localhost;dbname=terminoppgave2023";
-$dbusername = "root";
-$dbpassword = "";
+$dbusername = "termin2023";
+$dbpassword = "Jule3Kule.";
 
 try {
     $pdo = new PDO($dsn, $dbusername, $dbpassword);
