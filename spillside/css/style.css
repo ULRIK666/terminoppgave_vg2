@@ -124,10 +124,6 @@ img.maxwidth {
     width: 150px;
 }
 
-
-
-
-
 .container {
     width: 200px;
     background-color: #e6e6e6;
@@ -165,7 +161,7 @@ img.maxwidth {
 }
 
 #leaderboard_title {
-    width: 80%;
+    width: 50%;
     height: auto;
     background-color: gray;
     border-radius: 10px;
@@ -173,7 +169,7 @@ img.maxwidth {
 }
 
 #leaderboard {
-    width: 80%;
+    width: 50%;
     min-height: 50px;
     height: auto;
     background-color: rgb(203, 203, 203);

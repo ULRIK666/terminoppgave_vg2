@@ -5,25 +5,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
-    <title>Game</title>
+    <title>Spillside</title>
+    <script>
+        function update_leaderboard() {
+            let select_option = document.getElementById("spill");
+            let spill_id = select_option.options[select_option.selectedIndex].value;
+            let url = "show_leaderboard_content.php?spill_id=" + spill_id;
+
+            fetch(url)
+                .then(response => {
+                    // Check if the response is successful (status code 2xx)
+                    if (!response.ok) {
+                        throw new Error(`Network response was not ok: ${response.statusText}`);
+                    }
+                    // Parse the response as text
+                    return response.text();
+                })
+                .then(data => {
+                    // Update the content of the div with the fetched data
+                    document.getElementById('leaderboard_table').innerHTML = data;
+                })
+                .catch(error => {
+                    // Handle errors
+                    console.error('Error fetching data:', error);
+                });
+        }
+    </script>
+
+    </body>
+
+</html>
+
+
+</script>
 </head>
 
 <body>
     <div class="header">
         <div class="logo-container">
-            <div id="logo"><a href="index.php"><img class="maxwidth" src="images/alien_logo.png" alt=""></a></div>
+            <div id="logo"><a href="index.php"><img class="maxwidth" src="images/alien_logo.png" alt="logo"></a></div>
         </div>
         <div class="center" id="tittel-container">
             <h1 id="butikknavn">StarStruckArcade</h1>
         </div>
         <div class="icons-container">
-            <div class="icon"><a href="settings.php"><img class="maxwidth" src="images/settings.png"></a><b></b></div>
-            <div class="icon"><a href="log_inn.php"><img class="maxwidth" src="images/logginicon.png"></a><b>
+            <div class="icon"><a href="settings.php"><img class="maxwidth" src="images/settings.png" alt="innstillinger ikon"></a><b></b></div>
+            <div class="icon"><a href="log_inn.php"><img class="maxwidth" src="images/logginicon.png" alt="logg in ikon"></a><b>
 
                     <?php
-                    session_start();
 
-                    $id = $_SESSION["bruker_id"];
+                    session_start();
+                    if (isset($_SESSION["bruker_id"])) {
+                        $id = $_SESSION["bruker_id"];
+                    } else {
+                        //id = 0 betyr ikke logget inn
+                        $id = 0;
+                    }
+
 
                     if ($id == 0) {
                         $melding = "Ikke logget inn";
@@ -100,7 +138,7 @@
                     echo "<a href='../p5testspill/${game['spill_url']}'><img class='spill-img' src='images/spill_bilder/${game['bilde_url']}' alt='Game Image'></a>\n";
                     echo "</div>";
                     echo "</div>";
-                    echo "<a href='../p5testspill/${game['spill_url']}' class='play_button'>Spill</a>";
+                    echo "<a href='../p5testspill/${game['spill_url']}' class='play_button' alt='spill knapp'>Spill</a>";
                     echo "</div>";
 
                     echo "<br>";
@@ -126,11 +164,14 @@
 
                 Leaderboard for
                 <?php
-                echo "<select name='spill'>";
+                
+                // tenker å lage en select som gjør at man kan velge leaderboard for ett spill av gangen
+                echo "<select name='spill' id = 'spill' onchange='update_leaderboard()'>";
 
                 require "includes/dbh.inc.php";
 
-                $query = "SELECT id, navn FROM game";
+                // vil hente spill som faktisk har highscore og sorterer dem alfabetisk. ikke alle spill kan ha highscore 
+                $query ="SELECT DISTINCT spill_id, navn from user_highscore inner join game on user_highscore.spill_id = game.id order by game.navn";
                 $stmt = $pdo->prepare($query);
                 $stmt->execute();
                 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -140,8 +181,9 @@
                     return;
                 }
 
+                // lager option for hvert av spillene vi fant
                 foreach ($result as $game) {
-                    echo "    <option value='spill'>${game['navn']}</option>";
+                    echo "    <option value='${game['spill_id']}'>${game['navn']}</option>";
                 }
                 echo "</select>";
 
@@ -149,46 +191,10 @@
 
 
                 echo "</div>";
-                echo "<div class='rekorder'>";
+                echo "<div class='rekorder' id='leaderboard_table'>";
 
-
-                require "includes/dbh.inc.php";
-
-                // gjøre dynamisk 
-                $spill_id =  3;
-                $query = "SELECT * FROM user_highscore inner join bruker on user_highscore.bruker_id = bruker.id and spill_id = :spill_id ORDER BY poeng desc limit 5";
-                $stmt = $pdo->prepare($query);
-                $stmt->bindParam(":spill_id", $spill_id);
-                $stmt->execute();
-                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                if (empty($result)) {
-                    echo "<p>Ingen resultater for spill med id $spill_id i databasen</p>";
-                    return;
-                }
-
-                echo "<div class='center'>";
-                echo "<div class='scoreboard'>";
-                echo "<table>";
-                echo "<tr>";
-                echo "<td class='poengliste_top'>Plassering</td>";
-                echo "<td class='poengliste_top'>Bruker</td>";
-                echo "<td class='poengliste_top'>poeng</td>";
-                echo "</tr>\n";
-
-                $placement = 0;
-                foreach ($result as $row) {
-                    $placement++;
-                    echo "<tr>";
-                    echo "<td class='poengliste'>$placement</td>";
-                    echo "<td class='poengliste'>${row['brukernavn']}</td>";
-                    echo "<td class='poengliste'>${row['poeng']}</td>";
-                    echo "</tr>\n";
-                }
-                echo "</table>";
-                echo "</div>";
-                echo "</div>";
-                ?>
+                echo "</div>"
+                    ?>
             </div>
         </div>
     </div>
