@@ -27,8 +27,13 @@
                     <?php
                     session_start();
 
-                    $id = $_SESSION["bruker_id"];
-
+                    if (isset($_SESSION["bruker_id"])) {
+                        $id = $_SESSION["bruker_id"];
+                    } else {
+                        //id = 0 betyr ikke logget inn
+                        $id = 0;
+                    }
+                    
                     if ($id == 0) {
                         $melding = "Ikke logget inn";
 
