@@ -154,14 +154,12 @@ function draw() {
 			control_text.y = 400;
 			control_text.width = width / 5;
 			control_text.height = 150;
-			//left aligne virker ikke
-			//			control_text.textAlign = LEFT; 
 			show_controlls = true;
 		}
 	}
 
 	if (mouse.presses() && mouseX > info_button.x - 75 && mouseX < info_button.x + 75 && mouseY > info_button.y - 25 && mouseY < info_button.y + 25) {
-		if (show_controlls == true) {
+		if (show_info == true) {
 			info_text.remove();
 			show_info = false;
 		} else {
@@ -173,8 +171,6 @@ function draw() {
 			info_text.y = 400;
 			info_text.width = width / 5;
 			info_text.height = 150;
-			//left aligne virker ikke
-			//			control_text.textAlign = LEFT; 
 			show_info = true;
 		}
 	}
