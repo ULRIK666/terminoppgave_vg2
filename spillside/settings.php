@@ -14,7 +14,7 @@
             <div id="logo"><a href="index.php"><img class="maxwidth" src="images/alien_logo.png" alt=""></a></div>
         </div>
         <div class="center" id="tittel-container">
-            <h1 id="butikknavn">StarStruckArcade</h1>
+            <h1 id="spillside_navn">StarStruckArcade</h1>
         </div>
         <div class="icons-container">
             <div class="icon"><a href="settings.php"><img class="maxwidth" src="images/settings.png"></a><b></b></div>

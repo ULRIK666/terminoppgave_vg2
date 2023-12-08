@@ -14,19 +14,19 @@
 
             fetch(url)
                 .then(response => {
-                    // Check if the response is successful (status code 2xx)
+                    // finner ut om svaret hvar suksess 
                     if (!response.ok) {
                         throw new Error(`Network response was not ok: ${response.statusText}`);
                     }
-                    // Parse the response as text
+                    
                     return response.text();
                 })
                 .then(data => {
-                    // Update the content of the div with the fetched data
+                    // oppdaterer innholde fra hentet data
                     document.getElementById('leaderboard_table').innerHTML = data;
                 })
                 .catch(error => {
-                    // Handle errors
+                    // henter error data
                     console.error('Error fetching data:', error);
                 });
         }
@@ -46,13 +46,14 @@
             <div id="logo"><a href="index.php"><img class="maxwidth" src="images/alien_logo.png" alt="logo"></a></div>
         </div>
         <div class="center" id="tittel-container">
-            <h1 id="butikknavn">StarStruckArcade</h1>
+            <h1 id="spillside_navn">StarStruckArcade</h1>
         </div>
         <div class="icons-container">
             <div class="icon"><a href="settings.php"><img class="maxwidth" src="images/settings.png" alt="innstillinger ikon"></a><b></b></div>
             <div class="icon"><a href="log_inn.php"><img class="maxwidth" src="images/logginicon.png" alt="logg in ikon"></a><b>
 
                     <?php
+                    // den følgende koden vil skrive ut om du er logget in eller ikke og hvem du er logget inn som
 
                     session_start();
                     if (isset($_SESSION["bruker_id"])) {
@@ -61,7 +62,6 @@
                         //id = 0 betyr ikke logget inn
                         $id = 0;
                     }
-
 
                     if ($id == 0) {
                         $melding = "Ikke logget inn";
@@ -73,8 +73,6 @@
                         try {
                             require "includes/dbh.inc.php";
 
-
-
                             $query = "select brukernavn from bruker where id = :id";
 
                             $stmt = $pdo->prepare($query);
@@ -85,7 +83,8 @@
 
                             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-
+                            // hvis den ikke finner id-en i queryen skriver den ut meldingen under
+                            // hvis ikke vil den skrive ut hvem som er logget in og lenke for å logge ut
                             if (empty($result)) {
                                 $melding = "<p>Ukjent brukernavn!</p>";
                                 return;
@@ -98,7 +97,6 @@
 
                             $pdo = null;
                             $stmt = null;
-
 
                         } catch (PDOException $e) {
                             die("Query failed:" . $e->getMessage());
@@ -125,11 +123,13 @@
                 $stmt->execute();
                 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+                // hvis queryen ikke finner noen spill i databasen skriver den ut det under 
                 if (empty($result)) {
                     echo "<p>Ingen spill i databasen</p>";
                     return;
                 }
 
+                // skriver ut spill boksene ut ifra informasjon fra databasen
                 foreach ($result as $game) {
                     echo "<div class='spill-box'>";
                     echo "${game['navn']} <br>";

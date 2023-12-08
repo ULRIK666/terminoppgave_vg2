@@ -4,42 +4,12 @@ body {
     padding: 0;
 }
 
-.forside_knapper {
-    background-color: #4c4caf;
-    color: white;
-    padding: 10px;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 5px;
-    font-size: 16px;
-    margin: 15px;
-    cursor: pointer;
-}
-
-#landingside_bilde {
-    max-height: 330px;
-}
-
 .center {
     display: flex;
     justify-content: center;
 }
 
-.meny {
-    padding: 10px;
-}
-
-.link {
-    font-size: 20px;
-    font-weight: bold;
-    text-decoration: none;
-    color: black;
-    margin-right: 30px;
-    margin-left: 30px;
-    padding: 10px;
-}
-
-#butikknavn {
+#spillside_navn {
     font-size: 40px;
     font-weight: bold;
 }
@@ -81,7 +51,6 @@ body {
 img.maxwidth {
     max-width: 100%;
 }
-
 
 .play_button {
     background-color: #0d2861;

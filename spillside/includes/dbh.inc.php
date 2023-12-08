@@ -1,5 +1,5 @@
 <?php 
-
+// lager connection til databasen, logger inn for følgende bruker som har begrensa rettigheter
 $dsn = "mysql:host=localhost;dbname=terminoppgave2023";
 $dbusername = "termin2023";
 $dbpassword = "Jule3Kule.";

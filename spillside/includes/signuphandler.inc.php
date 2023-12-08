@@ -1,12 +1,13 @@
 <?php 
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // henter infylt brukernavn og passord
     $brukernavn       = $_POST["brukernavn"];
     $passord     = $_POST["passord"];
     
     try {
         require_once "dbh.inc.php";
 
+        // skriver in brukernavn og passord in i databasen 
         $query = "INSERT INTO bruker (brukernavn, passord) 
                   VALUES (:brukernavn, :passord);";
 
@@ -20,6 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         //$pdo = null;
         $stmt = null;
 
+        // sender deg tilbake osv
         header("location: ../index.php");
 
         die();

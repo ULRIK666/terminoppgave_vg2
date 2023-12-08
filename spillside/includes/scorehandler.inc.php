@@ -1,15 +1,13 @@
 <?php
-
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
+    // henter poen og spill id
     $poeng = $_GET["poeng"];
     $spill = $_GET["spill"];
 
     try {
         require_once "dbh.inc.php";
 
-
-        # 1 - finn bruker
-
+        // henter informasjon fra spill databasen hvor id er samme som den som er henta
         $query = "select id from game where navn = :spill";
 
         $stmt = $pdo->prepare($query);
@@ -20,6 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+        // hvis det ikke finnes noen med samme id skriver den ut "ukjent spill"
 
         if (empty($result)) {
             echo "<p>Ukjent spill</p>";
@@ -29,18 +28,17 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
             $spill_id = $row["id"];
         }
 
-        # 2 - sjekk passord
         session_start();
         $bruker_id = $_SESSION['bruker_id'];
 
+        // kjekker om logget inn
         if (!$bruker_id > 0) {
             echo "<p>Ikke logget inn</p>";
             return;
         }
 
 
-
-//echo "insert into user_highscore values(:bruker_id, :spill_id, curdate(), :poeng)";
+        // setter in highscore informasjon i user_highscore
         $query = "insert into user_highscore values(:bruker_id, :spill_id, curdate(), :poeng)";
 
         $stmt = $pdo->prepare($query);
@@ -54,8 +52,6 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $stmt = null;
 
         echo "highscore er oppdatert med $poeng";
-
-
 
         die();
     } catch (PDOException $e) {

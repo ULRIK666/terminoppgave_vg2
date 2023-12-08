@@ -1,6 +1,7 @@
 <?php
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    //hente brukernavn og passord
     $brukernavn = $_POST["brukernavn"];
     $passord = $_POST["passord"];
 
@@ -8,7 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         require_once "dbh.inc.php";
 
 
-        # 1 - finn bruker
+        # 1 - finner bruker
 
         $query = "select id, passord from bruker where brukernavn = :brukernavn";
 
@@ -30,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $bruker_id = $row["id"];
         }
 
-        # 2 - sjekk passord
+        # 2 - sjekker passord
         session_start();
         if ($passord == $signup_pwd) {
             $_SESSION['bruker_id'] = $bruker_id;
@@ -40,24 +41,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "<p>Feil passord</p>";
             return;
         }
-        # 3 - oppdater "logget_inn" på riktig kunde
-
-
-        //        $query = "update kunde set logget_inn = :logged_in where id = :kunde_id";
-
-        //        $stmt = $pdo->prepare($query);
-
-        //        $stmt->bindParam(":logged_in", $logget_inn);
-//        $stmt->bindParam(":kunde_id", $kunde_id);
-
-        //        $stmt->execute();
 
         $pdo = null;
         $stmt = null;
 
         header("location: ../index.php");
-
-
 
         die();
     } catch (PDOException $e) {
